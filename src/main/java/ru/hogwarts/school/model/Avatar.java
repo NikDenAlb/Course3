@@ -3,6 +3,7 @@ package ru.hogwarts.school.model;
 import java.util.Arrays;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ public class Avatar {
     private long fileSize;
 
     @Lob
+    @JsonIgnore
     private byte[] data;
 
     @OneToOne
