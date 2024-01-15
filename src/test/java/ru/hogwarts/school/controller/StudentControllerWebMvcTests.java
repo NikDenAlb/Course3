@@ -1,4 +1,4 @@
-package ru.hogwarts.school.conroller;
+package ru.hogwarts.school.controller;
 
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.Test;
