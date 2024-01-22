@@ -38,6 +38,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+        logger.debug("Uploading Avatar");
         Student student = studentRepository.getReferenceById(studentId);
         Path filePath = Path.of(avatarDir, student + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -78,6 +79,7 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     public Avatar findAvatar(Long studentId) {
+        logger.debug("Finding Avatar studentId={}", studentId);
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
@@ -89,9 +91,8 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public List<Avatar> findAll(Integer page, Integer size) {
+        logger.debug("Finding All Avatar page={}, size={}", page, size);
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         return avatarRepository.findAll(pageRequest).getContent();
     }
-
-
 }

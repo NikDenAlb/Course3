@@ -28,7 +28,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public Student findStudent(Long id) {
-        logger.debug("Finding Student");
+        logger.debug("Finding Student {}", id);
         return studentRepository.findById(id).get();
     }
 
@@ -38,12 +38,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public void deleteStudent(Long id) {
-        logger.debug("Deleting Student");
+        logger.debug("Deleting Student by id={}", id);
         studentRepository.deleteById(id);
     }
 
     public Collection<Student> filterAge(int age) {
-        logger.debug("AgeFiltering Students");
+        logger.debug("AgeFiltering Students age={}", age);
         return studentRepository.findAll()
                 .stream()
                 .filter(student -> student.getAge() == age)
@@ -52,26 +52,31 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Collection<Student> findByAgeBetween(int min, int max) {
-        logger.debug("AgeFinding Students");
+        logger.debug("AgeFinding Students from {} to {}", min, max);
         return studentRepository.findByAgeBetween(min, max);
     }
 
     @Override
     public Faculty getStudentsFaculty(long id) {
+        logger.debug("getStudentsFaculty: id = {}", id);
         return studentRepository.findStudentById(id).getFaculty();
     }
+
     @Override
     public Integer getQt() {
+        logger.debug("Getting all students quantity");
         return studentRepository.getQt();
     }
+
     @Override
     public Integer getAverageAge() {
+        logger.debug("Getting all students AverageAge");
         return studentRepository.getAverageAge();
     }
+
     @Override
-    public  List<Student> getFiveLastStudents() {
+    public List<Student> getFiveLastStudents() {
+        logger.debug("Getting FiveLastStudents");
         return studentRepository.getFiveLastStudents();
     }
-
-
 }

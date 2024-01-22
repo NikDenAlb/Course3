@@ -10,6 +10,7 @@ public class InfoServiceProduction implements InfoService {
 
     @Value("${server.port}")
     private Integer port;
+
     @Override
     public Integer getPort() {
         return port;
