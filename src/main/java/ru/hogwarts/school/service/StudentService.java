@@ -4,6 +4,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface StudentService {
     Student addStudent(Student faculty);
@@ -19,4 +20,10 @@ public interface StudentService {
     Collection<Student> findByAgeBetween(int min, int max);
 
     Faculty getStudentsFaculty(long id);
+
+    Integer getQt();
+
+    Integer getAverageAge();
+
+    List<Student> getFiveLastStudents();
 }
