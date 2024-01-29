@@ -9,6 +9,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,5 +79,96 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getFiveLastStudents() {
         logger.debug("Getting FiveLastStudents");
         return studentRepository.getFiveLastStudents();
+    }
+
+    @Override
+    public void printParallel() {
+        final int step = 2;
+
+        LinkedList<Student> students = new LinkedList<>(studentRepository.findAll()
+                .stream()
+                .limit(3 * step)
+                .toList());
+
+        for (int i = 0; i < step; i++) {
+            try {
+                System.out.println(students.get(i).getName());
+            } catch (IndexOutOfBoundsException e) {
+                throw new RuntimeException("List is smaller then " + (1 * step));
+            }
+        }
+
+        new Thread(() -> {
+            for (int i = 0; i < step; i++) {
+                try {
+                    System.out.println(students.get(i + step).getName());
+                } catch (IndexOutOfBoundsException e) {
+                    throw new RuntimeException("List is smaller then " + (2 * step));
+                }
+//              убедимся, что порядок разный
+//                try {
+//                    Thread.sleep(5);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            for (int i = 0; i < step; i++) {
+                try {
+                    System.out.println(students.get(i + 2 * step).getName());
+                } catch (IndexOutOfBoundsException e) {
+                    throw new RuntimeException("List is smaller then " + (3 * step));
+                }
+//                try {
+//                    Thread.sleep(5);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void printSynchronized() {
+        final int step = 2;
+
+        LinkedList<Student> students = new LinkedList<>(studentRepository.findAll()
+                .stream()
+                .limit(3 * step)
+                .toList());
+
+        for (int i = 0; i < step; i++) {
+            try {
+                synchronizedSOUT(students.get(i).getName());
+            } catch (IndexOutOfBoundsException e) {
+                throw new RuntimeException("List is smaller then " + (1 * step));
+            }
+        }
+
+        new Thread(() -> {
+            for (int i = 0; i < step; i++) {
+                try {
+                    synchronizedSOUT(students.get(i + step).getName());
+                } catch (IndexOutOfBoundsException e) {
+                    throw new RuntimeException("List is smaller then " + (2 * step));
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            for (int i = 0; i < step; i++) {
+                try {
+                    synchronizedSOUT(students.get(i + 2 * step).getName());
+                } catch (IndexOutOfBoundsException e) {
+                    throw new RuntimeException("List is smaller then " + (3 * step));
+                }
+            }
+        }).start();
+    }
+
+    private synchronized void synchronizedSOUT(String string) {
+        System.out.println(string);
     }
 }
