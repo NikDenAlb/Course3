@@ -11,6 +11,8 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -78,5 +80,58 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getFiveLastStudents() {
         logger.debug("Getting FiveLastStudents");
         return studentRepository.getFiveLastStudents();
+    }
+
+    @Override
+    public List<String> filterStartA() {
+        logger.debug("filterStartA");
+        return studentRepository.findAll()
+                .stream()
+                .filter(s -> s.getName().startsWith("A"))
+                .map(s -> s.getName().toUpperCase())
+                .sorted(String::compareTo)
+                .toList();
+    }
+
+    @Override
+    public Double getAverageAgeStream() {
+        logger.debug("getAverageAgeStream");
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
+
+    @Override
+    public Integer getSum() {
+        logger.debug("getSum");
+        long startTime = System.currentTimeMillis();
+        int sum = Stream.iterate(1, a -> a + 1)
+                .limit(10_000_000)
+                .reduce(0, Integer::sum);
+        logger.debug("Finish time  " + (System.currentTimeMillis() - startTime));
+        return sum;
+    }
+
+    @Override
+    public Integer getSumOpt() {
+        logger.debug("getSumOpt");
+        long startTime = System.currentTimeMillis();
+        int sum = IntStream.range(0, 10_000_000)
+                .reduce(0, Integer::sum);
+        logger.debug("Finish time  " + (System.currentTimeMillis() - startTime));
+        return sum;
+    }
+
+    @Override
+    public Integer getSumOpt2() {  //worse (needlessForkJoin)
+        logger.debug("getSumOpt2");
+        long startTime = System.currentTimeMillis();
+        int sum = Stream.iterate(1, a -> a + 1)
+                .parallel()
+                .limit(10_000_000)
+                .reduce(0, Integer::sum);
+        logger.debug("Finish time  " + (System.currentTimeMillis() - startTime));
+        return sum;
     }
 }

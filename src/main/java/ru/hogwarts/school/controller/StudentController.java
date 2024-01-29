@@ -85,4 +85,29 @@ public class StudentController {
         }
         return ResponseEntity.ok(lastFiveStudents);
     }
+
+    @GetMapping("/start-with-A")
+    public ResponseEntity<List<String>> getStudentsStartA() {
+        return ResponseEntity.ok(studentService.filterStartA());
+    }
+
+    @GetMapping("/average-age")
+    public ResponseEntity<Double> getAverageAgeStream() {
+        return ResponseEntity.ok(studentService.getAverageAgeStream());
+    }
+
+    @GetMapping("/sum")
+    public ResponseEntity<Integer> getSum() {
+        return ResponseEntity.ok(studentService.getSum());
+    }
+
+    @GetMapping("/sum-opt")
+    public ResponseEntity<Integer> getSumOpt() {
+        return ResponseEntity.ok(studentService.getSumOpt());
+    }
+
+    @GetMapping("/sum-opt2")
+    public ResponseEntity<Integer> getSumOpt2() {
+        return ResponseEntity.ok(studentService.getSumOpt2());
+    }
 }
